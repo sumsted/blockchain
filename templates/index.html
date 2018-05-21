@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>blockchain</title>
+</head>
+<body>
+<div class="container">
+    <div class="form-group">
+        <form>
+            <label for="sender">
+                <input id="sender" placeholder="sender" type="text">
+            </label>
+            <label for="sender">
+                <input id="recipient" placeholder="recipient" type="text">
+            </label>
+            <label for="tracking">
+                <input id="tracking" placeholder="tracking" type="text">
+            </label>
+            <button type="button" id="add">Add Transaction</button>
+            <button type="button" id="transactions">Pooled Transactions</button>
+            <button type="button" id="mine">Mine</button>
+            <button type="button" id="chain">Chain</button>
+        </form>
+    </div>
+    <div id="results"></div>
+</div>
+<script src="/static/js/jquery.js"></script>
+<script>
+
+$(function () {
+    $('#mine').click(function () {
+        $.getJSON('/mine',function (data){
+           $("#results").html('');
+           var result = '';
+           $("#results").append(result);
+           $("#results").append('<pre>'+JSON.stringify(data,null, '\t')+'</pre>');
+        });
+    });
+    $('#transactions').click(function () {
+        $.getJSON('/transactions', function (data){
+           $("#results").html('');
+           var result = '';
+           $("#results").append(result);
+           $("#results").append('<pre>'+JSON.stringify(data,null, '\t')+'</pre>');
+        });
+    });
+    $('#chain').click(function () {
+        $.getJSON('/chain', function (data){
+           $("#results").html('');
+           var result = '';
+           $("#results").append(result);
+           $("#results").append('<pre>'+JSON.stringify(data,null, '\t')+'</pre>');
+        });
+    });
+    $('#add').click(function () {
+        var payload = {
+            "sender":$('#sender').val(),
+            "recipient":$('#recipient').val(),
+            "tracking":$('#tracking').val()
+        }
+        $.ajax('/transaction/new',{
+            data : JSON.stringify(payload),
+            contentType : 'application/json',
+            type: 'POST',
+            success: function(data){
+               $("#results").html('');
+               var result = '';
+               $("#results").append(result);
+               $("#results").append('<pre>'+JSON.stringify(data,null, '\t')+'</pre>');
+               }
+            });
+        });
+    });
+
+</script>
+</body>
+</html>
