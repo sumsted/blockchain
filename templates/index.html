@@ -21,6 +21,8 @@
             <button type="button" id="transactions">Pooled Transactions</button>
             <button type="button" id="mine">Mine</button>
             <button type="button" id="chain">Chain</button>
+            <button type="button" id="validate">Validate</button>
+            <button type="button" id="corruptvalidate">Corrupt Validate</button>
         </form>
     </div>
     <div id="results"></div>
@@ -72,7 +74,37 @@ $(function () {
             });
         });
     });
-
+    $('#validate').click(function() {
+        $.getJSON('/chain', function(data){
+            $.ajax('/chain/validate', {
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                type: 'POST',
+                success: function(data){
+                    $("#results").html('');
+                    var result = '';
+                    $("#results").append(result);
+                    $("#results").append('<pre>'+JSON.stringify(data,null, '\t')+'</pre>');
+                }
+            });
+        });
+    });
+    $('#corruptvalidate').click(function() {
+        $.getJSON('/chain', function(data){
+            data['chain'][1]['previous_hash'] = data['chain'][1]['previous_hash'] + '1';
+            $.ajax('/chain/validate', {
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                type: 'POST',
+                success: function(data){
+                    $("#results").html('');
+                    var result = '';
+                    $("#results").append(result);
+                    $("#results").append('<pre>'+JSON.stringify(data,null, '\t')+'</pre>');
+                }
+            });
+        });
+    });
 </script>
 </body>
 </html>

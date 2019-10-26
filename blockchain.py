@@ -259,6 +259,13 @@ def full_chain():
     return response
 
 
+@post('/chain/validate')
+def chain_validate():
+    chain = request.json
+    chain['valid'] = blockchain.valid_chain(chain['chain'])
+    return chain
+
+
 @post('/nodes/register')
 def register_nodes():
     values = request.json
